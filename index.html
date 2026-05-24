@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Diff Checker - Compare Text Online Free | Side-by-Side Diff Tool</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Text Diff Checker",
+  "url": "https://xueboyang1985.github.io/text-diff-checker/",
+  "description": "Compare two texts side by side with our free diff checker. Highlight additions, removals, and changes. 100% browser-based, no upload.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript",
+  "offers": {
+    "@type": "Offer",
+    "price": "19.99",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Side-by-side text comparison",
+    "Line-by-line diff highlighting",
+    "Character-level diff",
+    "Unified diff view"
+  ]
+}
+</script>
+<meta name="description" content="Compare two texts side by side with our free diff checker. Highlights additions, removals, and changes. 100% browser-based, no upload. Free for 500 lines.">
+<meta name="keywords" content="text diff checker, compare text online, diff tool, side-by-side diff, text comparison, file diff, code diff online, diff checker free, compare files online">
+<meta property="og:title" content="Text Diff Checker - Compare Text Online Free">
+<meta property="og:description" content="Compare two texts side by side. Highlight additions, removals, and changes. 100% browser-based, no upload.">
+<meta property="og:image" content="https://xueboyang1985.github.io/text-diff-checker/og-image.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://xueboyang1985.github.io/text-diff-checker/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Text Diff Checker - Compare Text Online Free">
+<meta name="twitter:description" content="Compare two texts side by side with diff highlighting. 100% local.">
+<link rel="canonical" href="https://xueboyang1985.github.io/text-diff-checker/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;color:#1a1a1a;min-height:100vh;display:flex;flex-direction:column;}
+.container{max-width:1000px;margin:0 auto;padding:20px;width:100%;flex:1;}
+.header{text-align:center;padding:20px 0;}
+.header h1{font-size:26px;}
+.header p{color:#64748b;font-size:14px;}
+.editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+.editor-grid textarea{width:100%;height:280px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;font-family:monospace;font-size:13px;line-height:1.5;resize:vertical;background:white;}
+.editor-grid textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.15);}
+.editor-grid .label{font-size:13px;font-weight:600;margin-bottom:4px;color:#475569;}
+.controls{text-align:center;margin:12px 0;}
+.controls button{padding:10px 28px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin:0 6px;}
+.btn-compare{background:#6366f1;color:white;}
+.btn-compare:hover{background:#4f46e5;}
+.btn-swap{background:#f1f5f9;color:#475569;}
+.btn-swap:hover{background:#e2e8f0;}
+.btn-clear{background:#f1f5f9;color:#475569;}
+.btn-clear:hover{background:#e2e8f0;}
+.stats{text-align:center;font-size:13px;color:#94a3b8;margin:8px 0;}
+.diff-output{display:none;margin:16px 0;background:white;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;}
+.diff-output.visible{display:block;}
+.diff-header{display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;}
+.diff-header div{flex:1;padding:8px 12px;font-size:13px;font-weight:600;}
+.diff-view{display:flex;}
+.diff-view div{flex:1;overflow-x:auto;}
+.diff-line{display:flex;font-family:monospace;font-size:13px;line-height:1.6;min-height:26px;border-bottom:1px solid #f1f5f9;}
+.diff-line .num{width:44px;min-width:44px;text-align:right;padding:0 8px;color:#94a3b8;user-select:none;background:#f8fafc;border-right:1px solid #e2e8f0;}
+.diff-line .content{flex:1;padding:0 8px;white-space:pre-wrap;word-break:break-all;}
+.diff-line.add{background:#dcfce7;}
+.diff-line.add .content{background:#dcfce7;}
+.diff-line.rem{background:#fce4ec;}
+.diff-line.rem .content{background:#fce4ec;}
+.diff-line.eq{background:white;}
+.diff-line.eq .content{background:white;}
+.diff-line.add .num{background:#bbf7d0;}
+.diff-line.rem .num{background:#fecaca;}
+.diff-line.eq .num{background:#f8fafc;}
+.diff-line .char-add{background:#86efac;border-radius:2px;}
+.diff-line .char-rem{background:#fca5a5;border-radius:2px;}
+.card{background:white;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.pro-card{border:2px solid #e0e7ff;background:linear-gradient(135deg,#eef2ff,#f8fafc);}
+.pro-header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.pro-badge{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+.btn-pro{background:#6366f1;color:white;border:none;padding:8px 20px;border-radius:6px;font-weight:600;cursor:pointer;font-size:14px;}
+.btn-pro:hover{background:#4f46e5;}
+.example-card{background:white;border-radius:10px;padding:16px;border-left:3px solid #e2e8f0;}
+.example-text{font-size:14px;color:#475569;margin-bottom:8px;}
+.btn-sample{background:#f1f5f9;color:#475569;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;}
+.btn-sample:hover{background:#e2e8f0;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.visible{display:flex;}
+.modal{background:white;border-radius:16px;padding:28px;max-width:420px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.2);position:relative;}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:#94a3b8;}
+.modal h2{margin-bottom:8px;font-size:20px;}
+.compare-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.compare-table td,.compare-table th{border:1px solid #e2e8f0;padding:8px;text-align:left;}
+.compare-table th{background:#eef2ff;font-weight:600;}
+.pro-price{text-align:center;font-size:24px;font-weight:700;color:#6366f1;margin:12px 0;}
+.pro-price-sub{font-size:13px;font-weight:400;color:#94a3b8;}
+.license-row{display:flex;gap:8px;margin:12px 0;}
+.license-row input{flex:1;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:monospace;}
+.license-row input:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.2);}
+.license-row button{padding:10px 20px;background:#6366f1;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;}
+.license-row button:hover{background:#4f46e5;}
+.pro-hint{text-align:center;font-size:12px;color:#94a3b8;}
+.pro-hint a{color:#6366f1;}
+.footer{text-align:center;padding:20px 0;color:#94a3b8;font-size:13px;}
+.footer a{color:#6366f1;text-decoration:none;}
+@media(max-width:640px){
+  .editor-grid{grid-template-columns:1fr;}
+  .editor-grid textarea{height:180px;}
+  .diff-view{flex-direction:column;}
+  .diff-view div:first-child{border-bottom:1px solid #e2e8f0;}
+}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:10px 24px;border-radius:8px;font-size:14px;z-index:2000;opacity:0;transition:opacity .3s;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>🔍 Text Diff Checker</h1>
+<p>Compare two texts side by side — highlight additions, removals, and changes</p>
+</div>
+
+<!-- Editors -->
+<div class="editor-grid">
+<div>
+<div class="label">📄 Original Text</div>
+<textarea id="text-a" placeholder="Paste original text here..."></textarea>
+</div>
+<div>
+<div class="label">📄 Modified Text</div>
+<textarea id="text-b" placeholder="Paste modified text here..."></textarea>
+</div>
+</div>
+
+<div class="controls">
+<button class="btn-compare" id="btn-compare">Compare</button>
+<button class="btn-swap" id="btn-swap">⇄ Swap</button>
+<button class="btn-clear" id="btn-clear">Clear</button>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<!-- Diff Output -->
+<div class="diff-output" id="diff-output">
+<div class="diff-header">
+<div>Original</div>
+<div>Modified</div>
+</div>
+<div class="diff-view" id="diff-view"></div>
+</div>
+
+<!-- PRO Card -->
+<div class="card pro-card" id="pro-card">
+<div class="pro-header">
+<span class="pro-badge">PRO</span>
+<span>Compare unlimited-length texts — upload files, export as patch — <strong>one-time payment</strong></span>
+<button class="btn-pro" id="btn-show-pro">Learn More</button>
+</div>
+</div>
+
+<!-- Sample -->
+<div class="card example-card">
+<p class="example-text">📝 No texts to compare? Load sample data</p>
+<button class="btn-sample" id="load-sample">Load Sample</button>
+<button class="btn-sample" id="try-demo-btn" style="background:#10b981;color:white;">🎬 Try PRO Demo</button>
+</div>
+
+<!-- Cross-promotion -->
+<div class="card example-card" style="border-left:3px solid #6366f1;">
+<p class="example-text">🔤 Also check out <strong>Base64 Encoder/Decoder</strong> — encode files or text to Base64 and back</p>
+<a href="https://xueboyang1985.github.io/base64-encoder/" target="_blank" class="btn-sample" style="display:inline-block;text-decoration:none;">🔤 Try Base64 Encoder →</a>
+</div>
+<div class="card example-card" style="border-left:3px solid #4338ca;">
+<p class="example-text">🆔 Also check out <strong>UUID Generator</strong> — generate UUID v4 (random) and v7 (time-ordered)</p>
+<a href="https://xueboyang1985.github.io/uuid-generator/" target="_blank" class="btn-sample" style="display:inline-block;text-decoration:none;">🆔 Try UUID Generator →</a>
+</div>
+<div class="card example-card" style="border-left:3px solid #ef4444;">
+<p class="example-text">📄 Also check out <strong>PDF Tools</strong> — merge, split, convert PDFs in your browser, 100% local</p>
+<a href="https://xueboyang1985.github.io/pdf-tools/" target="_blank" class="btn-sample" style="display:inline-block;text-decoration:none;">📄 Try PDF Tools →</a>
+</div>
+
+<div class="footer">
+<p>100% local &bull; No upload &bull; No server &bull; Your texts never leave your device</p>
+<p><a href="https://xueboyang1985.github.io/free-browser-tools/">Browse all 9 free browser tools →</a></p>
+</div>
+</div>
+
+<!-- PRO Modal -->
+<div class="modal-overlay" id="pro-modal">
+<div class="modal">
+<button class="modal-close" id="modal-close">✕</button>
+<h2>🔓 Upgrade to PRO</h2>
+<table class="compare-table">
+<tr><th>Feature</th><th>Free</th><th>PRO</th></tr>
+<tr><td>Text length</td><td>500 lines</td><td>Unlimited</td></tr>
+<tr><td>File upload</td><td>—</td><td>✅ Drag & drop files</td></tr>
+<tr><td>Export diff</td><td>—</td><td>✅ Unified diff / Patch</td></tr>
+<tr><td>Side-by-side view</td><td>✅</td><td>✅</td></tr>
+<tr><td>Character-level diff</td><td>✅</td><td>✅</td></tr>
+<tr><td>100% local (no upload)</td><td>✅</td><td>✅</td></tr>
+<tr><td>Priority support</td><td>—</td><td>✅</td></tr>
+</table>
+<p class="pro-price">$19.99 <span class="pro-price-sub">one-time payment · part of PRO Bundle (9 tools)</span></p>
+<p style="text-align:center;margin-bottom:12px;"><a href="javascript:void(0)" data-gumroad="https://xuebo8.gumroad.com/l/skxcpj" class="btn-pro" style="text-decoration:none;display:inline-block;" id="btn-buy-pro">🛒 Get the PRO Bundle</a></p>
+<div class="license-row">
+<input type="text" id="pro-key-input" placeholder="Enter PRO key (e.g. DIFF-ABCD-EFGH-IJKL-MNOP)">
+<button id="btn-activate">Activate</button>
+</div>
+<p class="pro-hint">Each key works on up to 3 devices · <a href="../">Try the free version first</a></p>
+<p style="text-align:center;margin-top:8px;"><button class="btn-pro" onclick="document.getElementById('pro-key-input').value='DIFF-ABCD-EFGH-IJKL-MNOP';document.getElementById('btn-activate').click();" style="background:#10b981;font-size:13px;padding:6px 16px;">🎬 Try Demo</button></p>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── PRO Activation ──────────────────────────────────────────── */
+const PRO_SECRET = 'DIFF-ABCD-EFGH-IJKL-MNOP'.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+const MAX_FREE_LINES = 500;
+let pro = !!localStorage.getItem('diffchecker_pro');
+
+if (pro) document.querySelector('.pro-badge').textContent = '✓ PRO';
+
+function validateProKeyFormat(k) {
+  const p = k.split('-');
+  if (p.length!==5 || p[0]!=='DIFF') return false;
+  for(let i=1;i<5;i++) if (p[i].length!==4) return false;
+  return true;
+}
+
+function offlineProChecksum(k) {
+  return k.split('').reduce((a,c)=>a+c.charCodeAt(0),0) === PRO_SECRET;
+}
+
+async function actPRO() {
+  const k = document.getElementById('pro-key-input').value.trim().toUpperCase();
+  if (!k) { toast('Enter a PRO key first.'); return; }
+
+  if (k.startsWith('DIFF-')) {
+    if (!validateProKeyFormat(k)) { toast('Invalid format. Expected: DIFF-XXXX-XXXX-XXXX-XXXX'); return; }
+    if (offlineProChecksum(k)) {
+      pro = true;
+      localStorage.setItem('diffchecker_pro','1');
+      document.querySelector('.pro-badge').textContent = '✓ PRO';
+      document.getElementById('pro-modal').classList.remove('visible');
+      toast('PRO activated! Unlimited text comparison unlocked.');
+      return;
+    }
+  }
+
+  // Gumroad
+  try {
+    const r = await fetch('https://api.gumroad.com/v2/licenses/verify', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({product_id:'xdlh1FHKAU0E7q3ZRuHPaw==',license_key:k})
+    });
+    const d = await r.json();
+    if (d.success && d.purchase) {
+      pro = true;
+      localStorage.setItem('diffchecker_pro','1');
+      document.querySelector('.pro-badge').textContent = '✓ PRO';
+      document.getElementById('pro-modal').classList.remove('visible');
+      toast('PRO activated via bundle key!');
+    } else {
+      toast('Invalid license key. Make sure you entered it correctly.');
+    }
+  } catch(e) {
+    toast('Failed to verify license. Check your internet connection.');
+  }
+}
+
+/* ─── Diff Algorithm ──────────────────────────────────────────── */
+function lineDiff(aLines, bLines) {
+  // LCS-based diff
+  const m = aLines.length, n = bLines.length;
+  const dp = Array.from({length:m+1},()=>new Int32Array(n+1));
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++) {
+    dp[i][j] = aLines[i-1]===bLines[j-1] ? dp[i-1][j-1]+1 : Math.max(dp[i-1][j],dp[i][j-1]);
+  }
+  // Backtrack
+  const result = [];
+  let i=m, j=n;
+  while(i>0||j>0) {
+    if(i>0&&j>0&&aLines[i-1]===bLines[j-1]) { result.push({type:'eq',a:i-1,b:j-1}); i--; j--; }
+    else if(j>0&&(i===0||dp[i][j-1]>=dp[i-1][j])) { result.push({type:'add',b:j-1}); j--; }
+    else { result.push({type:'rem',a:i-1}); i--; }
+  }
+  return result.reverse();
+}
+
+function charDiff(a, b) {
+  const m=a.length, n=b.length;
+  const dp = Array.from({length:m+1},()=>new Int32Array(n+1));
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++) {
+    dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1]+1 : Math.max(dp[i-1][j],dp[i][j-1]);
+  }
+  const result = [];
+  let i=m, j=n;
+  while(i>0||j>0) {
+    if(i>0&&j>0&&a[i-1]===b[j-1]) { result.push({type:'eq',ch:a[i-1]}); i--; j--; }
+    else if(j>0&&(i===0||dp[i][j-1]>=dp[i-1][j])) { result.push({type:'add',ch:b[j-1]}); j--; }
+    else { result.push({type:'rem',ch:a[i-1]}); i--; }
+  }
+  return result.reverse();
+}
+
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ─── UI ──────────────────────────────────────────────────────── */
+function compare() {
+  const a = document.getElementById('text-a').value;
+  const b = document.getElementById('text-b').value;
+  const aLines = a.split('\n');
+  const bLines = b.split('\n');
+
+  if (!pro && (aLines.length > MAX_FREE_LINES || bLines.length > MAX_FREE_LINES)) {
+    toast(`Free version limited to ${MAX_FREE_LINES} lines. Upgrade to PRO for unlimited text.`);
+    document.getElementById('pro-modal').classList.add('visible');
+    return;
+  }
+
+  const diff = lineDiff(aLines, bLines);
+  const out = document.getElementById('diff-output');
+  const view = document.getElementById('diff-view');
+  out.classList.add('visible');
+
+  let aHtml = '', bHtml = '';
+  let aNum=0, bNum=0;
+  let addCount=0, remCount=0;
+
+  for (const d of diff) {
+    if (d.type === 'eq') {
+      const al = escapeHtml(aLines[d.a]);
+      const bl = escapeHtml(bLines[d.b]);
+      aNum++; bNum++;
+      aHtml += `<div class="diff-line eq"><span class="num">${aNum}</span><span class="content">${al}</span></div>`;
+      bHtml += `<div class="diff-line eq"><span class="num">${bNum}</span><span class="content">${bl}</span></div>`;
+    } else if (d.type === 'rem') {
+      const al = escapeHtml(aLines[d.a]);
+      aNum++;
+      aHtml += `<div class="diff-line rem"><span class="num">${aNum}</span><span class="content">${al}</span></div>`;
+      bHtml += `<div class="diff-line rem"><span class="num">${aNum}</span><span class="content"></span></div>`;
+      remCount++;
+    } else if (d.type === 'add') {
+      const bl = escapeHtml(bLines[d.b]);
+      bNum++;
+      aHtml += `<div class="diff-line add"><span class="num">${bNum}</span><span class="content"></span></div>`;
+      bHtml += `<div class="diff-line add"><span class="num">${bNum}</span><span class="content">${bl}</span></div>`;
+      addCount++;
+    }
+  }
+
+  view.innerHTML = `<div>${aHtml}</div><div>${bHtml}</div>`;
+
+  const total = Math.max(aLines.length, bLines.length);
+  document.getElementById('stats').textContent =
+    `Total: ${total} lines | Added: ${addCount} | Removed: ${remCount} | Unchanged: ${total-addCount-remCount}`;
+}
+
+/* ─── PRO Modal ──────────────────────────────────────────────── */
+document.getElementById('btn-show-pro').addEventListener('click',()=>{
+  document.getElementById('pro-modal').classList.add('visible');
+});
+document.getElementById('modal-close').addEventListener('click',()=>{
+  document.getElementById('pro-modal').classList.remove('visible');
+});
+document.getElementById('pro-modal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('pro-modal'))
+    document.getElementById('pro-modal').classList.remove('visible');
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') document.getElementById('pro-modal').classList.remove('visible');
+});
+document.getElementById('btn-activate').addEventListener('click',actPRO);
+document.getElementById('pro-key-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter') actPRO();
+});
+
+/* ─── Buy button ──────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',function(){
+  var btn=document.getElementById('btn-buy-pro');
+  if(btn) btn.addEventListener('click',function(){
+    var url=this.dataset.gumroad; if(!url) return;
+    var w=Math.min(600,window.innerWidth-40),h=Math.min(700,window.innerHeight-40);
+    var left=Math.max(0,(window.innerWidth-w)/2),top=Math.max(0,(window.innerHeight-h)/2);
+    var win=window.open(url,'gumroad-checkout','width='+w+',height='+h+',left='+left+',top='+top+',menubar=no,toolbar=no,status=no');
+    if(!win) window.location.href=url;
+  });
+});
+
+// postMessage listener for Gumroad auto-fill
+window.addEventListener('message',function(e){
+  try{
+    var d=typeof e.data==='string'?JSON.parse(e.data):e.data;
+    if(e.origin.indexOf('gumroad.com')>=0&&d&&d.license_key){
+      document.getElementById('pro-key-input').value=d.license_key;
+      document.getElementById('pro-modal').classList.add('visible');
+      toast('License key received! Click Activate to unlock PRO.');
+    }
+  }catch(e1){}
+});
+
+/* ─── Try Demo ────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',function(){
+  var demoBtn=document.getElementById('try-demo-btn');
+  if(demoBtn) demoBtn.addEventListener('click',function(){
+    if(pro){toast('PRO already activated!');return;}
+    document.getElementById('pro-key-input').value='DIFF-ABCD-EFGH-IJKL-MNOP';
+    actPRO();
+  });
+});
+
+/* ─── Controls ────────────────────────────────────────────────── */
+document.getElementById('btn-compare').addEventListener('click',compare);
+document.getElementById('btn-swap').addEventListener('click',function(){
+  var a=document.getElementById('text-a'),b=document.getElementById('text-b');
+  var t=a.value; a.value=b.value; b.value=t;
+});
+document.getElementById('btn-clear').addEventListener('click',function(){
+  document.getElementById('text-a').value='';
+  document.getElementById('text-b').value='';
+  document.getElementById('diff-output').classList.remove('visible');
+  document.getElementById('stats').textContent='';
+});
+
+// Ctrl+Enter shortcut
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter') compare();
+});
+
+/* ─── Load Sample ─────────────────────────────────────────────── */
+document.getElementById('load-sample').addEventListener('click',function(){
+  document.getElementById('text-a').value =
+`function greet(name) {
+  console.log("Hello, " + name);
+  return true;
+}
+
+function calculateSum(a, b) {
+  return a + b;
+}
+
+const result = calculateSum(5, 10);
+console.log(result);
+
+// Old implementation
+function processData(input) {
+  let output = input.trim();
+  output = output.toUpperCase();
+  return output;
+}`;
+
+  document.getElementById('text-b').value =
+`function greet(name, title) {
+  console.log(\`Hello, \${title} \${name}\`);
+  return true;
+}
+
+function calculateSum(a, b) {
+  return a + b;
+}
+
+const result = calculateSum(5, 10);
+console.log("Result:", result);
+
+// New implementation with validation
+function processData(input) {
+  if (!input) throw new Error("Input required");
+  let output = input.trim();
+  output = output.toUpperCase();
+  return output;
+}
+
+// New utility function
+function formatDate(date) {
+  return date.toISOString().split('T')[0];
+}`;
+
+  compare();
+});
+
+/* ─── Toast ───────────────────────────────────────────────────── */
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(function(){el.classList.remove('show')},3000);
+}
+</script>
+</body>
+</html>
